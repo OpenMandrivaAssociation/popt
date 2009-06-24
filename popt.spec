@@ -1,6 +1,6 @@
 %define name popt
 %define version 1.15
-%define release %mkrel 2
+%define release %mkrel 3
  
 %define lib_major 0 
 %define lib_name %mklibname %{name} %{lib_major} 
@@ -30,7 +30,7 @@ shell-like rules.
 %package -n     %{lib_name}
 Summary:        %{name} library
 Group:          System/Libraries
-Requires:	%{name}-data = %{version}
+Requires:	%{name}-data = %{epoch}:%{version}
 
 %description -n %{lib_name}
 This package contains the library needed to run programs dynamically
@@ -40,9 +40,8 @@ linked with the %{name} library.
 %package -n     %{devel_name}
 Summary:        Development headers and libraries for %{name}
 Group:          Development/C
-Requires:       %{lib_name} = %{version}
-Provides:       %{name}-devel = %{version}-%{release}
-Provides:       %{name}-devel = %{version}-%{release}
+Requires:       %{lib_name} = %{epoch}:%{version}
+Provides:       %{name}-devel = %{epoch}:%{version}-%{release}
 
 %description -n %{devel_name} 
 This package contains the header files and libraries needed for
@@ -71,7 +70,6 @@ rm -rf %{buildroot}
 
 %clean
 rm -rf %{buildroot}
-
 
 %files -n %{lib_name}
 %defattr(-,root,root)
