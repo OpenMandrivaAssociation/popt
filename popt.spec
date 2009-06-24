@@ -1,6 +1,6 @@
 %define name popt
 %define version 1.15
-%define release %mkrel 1
+%define release %mkrel 2
  
 %define lib_major 0 
 %define lib_name %mklibname %{name} %{lib_major} 
@@ -10,6 +10,7 @@ Summary: C library for parsing command line parameters
 Name: %{name}
 Version: %{version}
 Release: %{release}
+Epoch: 1
 Source0: http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
 License: MIT
 Group: System/Libraries
