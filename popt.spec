@@ -31,6 +31,7 @@ shell-like rules.
 Summary:        %{name} library
 Group:          System/Libraries
 Requires:	%{name}-data = %{epoch}:%{version}
+Provides:	%{name} = %{version}-%{release}
 
 %description -n %{lib_name}
 This package contains the library needed to run programs dynamically
