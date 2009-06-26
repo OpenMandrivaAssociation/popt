@@ -1,6 +1,6 @@
 %define name popt
 %define version 1.15
-%define release %mkrel 4
+%define release %mkrel 5
  
 %define lib_major 0 
 %define lib_name %mklibname %{name} %{lib_major} 
@@ -43,6 +43,7 @@ Summary:        Development headers and libraries for %{name}
 Group:          Development/C
 Requires:       %{lib_name} = %{epoch}:%{version}
 Provides:       %{name}-devel = %{epoch}:%{version}-%{release}
+Provides:	libpopt-devel = %{epoch}:%{version}-%{release}
 
 %description -n %{devel_name} 
 This package contains the header files and libraries needed for
