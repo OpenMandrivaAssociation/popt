@@ -1,21 +1,21 @@
 %define name popt
 %define version 1.15
-%define release %mkrel 5
+%define release %mkrel 6
  
-%define lib_major 0 
-%define lib_name %mklibname %{name} %{lib_major} 
-%define devel_name %mklibname %{name} -d 
+%define lib_major 0
+%define lib_name %mklibname %{name} %{lib_major}
+%define devel_name %mklibname %{name} -d
 
-Summary: C library for parsing command line parameters
-Name: %{name}
-Version: %{version}
-Release: %{release}
-Epoch: 1
-Source0: http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
-License: MIT
-Group: System/Libraries
-Url: http://rpm5.org/files/popt/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Summary:	C library for parsing command line parameters
+Name:		%{name}
+Version:	%{version}
+Release:	%{release}
+Epoch:		1
+License:	MIT
+Group:		System/Libraries
+Url:		http://rpm5.org/files/popt/
+Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Popt is a C library for parsing command line parameters. Popt was
@@ -27,9 +27,9 @@ arguments to be aliased via configuration files and includes utility
 functions for parsing arbitrary strings into argv[] arrays using
 shell-like rules.
 
-%package -n     %{lib_name}
-Summary:        %{name} library
-Group:          System/Libraries
+%package -n %{lib_name}
+Summary:	Main %{name} library
+Group:		System/Libraries
 Requires:	%{name}-data = %{epoch}:%{version}
 Provides:	%{name} = %{version}-%{release}
 
@@ -37,32 +37,31 @@ Provides:	%{name} = %{version}-%{release}
 This package contains the library needed to run programs dynamically
 linked with the %{name} library.
 
-
-%package -n     %{devel_name}
-Summary:        Development headers and libraries for %{name}
-Group:          Development/C
-Requires:       %{lib_name} = %{epoch}:%{version}
-Provides:       %{name}-devel = %{epoch}:%{version}-%{release}
+%package -n %{devel_name}
+Summary:	Development headers and libraries for %{name}
+Group:		Development/C
+Requires:	%{lib_name} = %{epoch}:%{version}
+Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
 Provides:	libpopt-devel = %{epoch}:%{version}-%{release}
 
 %description -n %{devel_name} 
 This package contains the header files and libraries needed for
 developing programs using the %{name} library.
 
-
-%package -n	%{name}-data
-Summary:	popt static data
-Group:          System/Libraries
+%package -n %{name}-data
+Summary:	Data files for %{name}
+Group:		System/Libraries
 
 %description -n popt-data
 This package contains popt data files like locales.
-
 
 %prep
 %setup -q
 
 %build
-%configure2_5x
+%configure2_5x \
+	--disable-rpath
+
 %make
 
 %install
@@ -85,5 +84,5 @@ rm -rf %{buildroot}
 %{_libdir}/lib%{name}.so
 %{_mandir}/man3/popt.*
 
-%files -n %{name}-data -f %name.lang
+%files -n %{name}-data -f %{name}.lang
 %defattr(-,root,root)
