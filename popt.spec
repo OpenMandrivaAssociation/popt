@@ -1,6 +1,6 @@
 %define name popt
 %define version 1.15
-%define release %mkrel 6
+%define release %mkrel 7
  
 %define lib_major 0
 %define lib_name %mklibname %{name} %{lib_major}
