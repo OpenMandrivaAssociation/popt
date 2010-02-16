@@ -1,6 +1,6 @@
 %define name popt
 %define version 1.15
-%define release %mkrel 7
+%define release %mkrel 8
  
 %define lib_major 0
 %define lib_name %mklibname %{name} %{lib_major}
@@ -59,7 +59,7 @@ This package contains popt data files like locales.
 %setup -q
 
 %build
-%configure2_5x \
+%configure2_5x --libdir=/%{_lib} \
 	--disable-rpath
 
 %make
@@ -75,13 +75,13 @@ rm -rf %{buildroot}
 %files -n %{lib_name}
 %defattr(-,root,root)
 %doc README
-%{_libdir}/lib%{name}.so.%{lib_major}*
+/%{_lib}/lib%{name}.so.%{lib_major}*
 
 %files -n %{devel_name}
 %defattr(-,root,root)
 %{_includedir}/%{name}.h
-%{_libdir}/lib%{name}*a
-%{_libdir}/lib%{name}.so
+/%{_lib}/lib%{name}*a
+/%{_lib}/lib%{name}.so
 %{_mandir}/man3/popt.*
 
 %files -n %{name}-data -f %{name}.lang
