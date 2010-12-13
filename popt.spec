@@ -4,13 +4,14 @@
 
 Summary:	C library for parsing command line parameters
 Name:		popt
-Version:	1.15
-Release:	%mkrel 11
+Version:	1.16
+Release:	%mkrel 1
 Epoch:		1
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
 Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
+Patch0:		popt-1.16-pkgconfig-libdir.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -54,6 +55,8 @@ This package contains popt data files like locales.
 
 %prep
 %setup -q
+%patch0 -p1 -b .pkglib64~
+autoreconf -f
 
 %build
 %configure2_5x	--disable-rpath
@@ -81,6 +84,7 @@ rm -rf %{buildroot}
 %files -n %{devel_name}
 %defattr(-,root,root)
 %{_includedir}/%{name}.h
+%{_libdir}/pkgconfig/popt.pc
 %{_libdir}/lib%{name}*a
 %{_libdir}/lib%{name}.so
 %{_mandir}/man3/popt.*
