@@ -78,7 +78,7 @@ rm -rf %{buildroot}
 
 %files -n %{lib_name}
 %defattr(-,root,root)
-%doc README
+%doc README CHANGES
 /%{_lib}/lib%{name}.so.%{lib_major}*
 
 %files -n %{devel_name}
