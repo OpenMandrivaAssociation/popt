@@ -5,14 +5,14 @@
 Summary:	C library for parsing command line parameters
 Name:		popt
 Version:	1.16
-Release:	%mkrel 2
+Release:	3
 Epoch:		1
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
 Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
 Patch0:		popt-1.16-pkgconfig-libdir.patch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+BuildRequires:	gettext
 
 %description
 Popt is a C library for parsing command line parameters. Popt was
@@ -38,7 +38,6 @@ linked with the %{name} library.
 Summary:	Development headers and libraries for %{name}
 Group:		Development/C
 Requires:	%{lib_name} = %{epoch}:%{version}
-Requires:	%{lib_name} >= 1:1.15-8
 Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
 Provides:	libpopt-devel = %{epoch}:%{version}-%{release}
 
@@ -73,16 +72,12 @@ ln -sf ../../%{_lib}/lib%{name}.so.%{lib_major}.* lib%{name}.so
 popd
 %find_lang %{name}
 
-%clean
-rm -rf %{buildroot}
 
 %files -n %{lib_name}
-%defattr(-,root,root)
 %doc README CHANGES
 /%{_lib}/lib%{name}.so.%{lib_major}*
 
 %files -n %{devel_name}
-%defattr(-,root,root)
 %{_includedir}/%{name}.h
 %{_libdir}/pkgconfig/popt.pc
 %{_libdir}/lib%{name}*a
@@ -90,4 +85,3 @@ rm -rf %{buildroot}
 %{_mandir}/man3/popt.*
 
 %files -n %{name}-data -f %{name}.lang
-%defattr(-,root,root)
