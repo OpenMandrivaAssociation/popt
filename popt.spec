@@ -28,7 +28,6 @@ shell-like rules.
 Summary:	Main %{name} library
 Group:		System/Libraries
 Requires:	%{name}-data = %{EVRD}
-Provides:	%{name} = %{version}-%{release}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
@@ -39,7 +38,6 @@ Summary:	Development headers and libraries for %{name}
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
-Provides:	libpopt-devel = %{EVRD}
 
 %description -n	%{devname} 
 This package contains the header files and libraries needed for
