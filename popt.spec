@@ -27,7 +27,7 @@ shell-like rules.
 %package -n	%{libname}
 Summary:	Main %{name} library
 Group:		System/Libraries
-Requires:	%{name}-data = %{epoch}:%{version}
+Requires:	%{name}-data = %{EVRD}
 Provides:	%{name} = %{version}-%{release}
 
 %description -n %{libname}
@@ -37,9 +37,9 @@ linked with the %{name} library.
 %package -n	%{devname}
 Summary:	Development headers and libraries for %{name}
 Group:		Development/C
-Requires:	%{libname} = %{epoch}:%{version}
-Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
-Provides:	libpopt-devel = %{epoch}:%{version}-%{release}
+Requires:	%{libname} = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
+Provides:	libpopt-devel = %{EVRD}
 
 %description -n	%{devname} 
 This package contains the header files and libraries needed for
