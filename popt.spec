@@ -1,11 +1,11 @@
-%define lib_major 0
-%define lib_name %mklibname %{name} %{lib_major}
-%define devel_name %mklibname %{name} -d
+%define	major	0
+%define	libname	%mklibname %{name} %{major}
+%define	devname	%mklibname %{name} -d
 
 Summary:	C library for parsing command line parameters
 Name:		popt
 Version:	1.16
-Release:	3
+Release:	4
 Epoch:		1
 License:	MIT
 Group:		System/Libraries
@@ -24,24 +24,24 @@ arguments to be aliased via configuration files and includes utility
 functions for parsing arbitrary strings into argv[] arrays using
 shell-like rules.
 
-%package -n	%{lib_name}
+%package -n	%{libname}
 Summary:	Main %{name} library
 Group:		System/Libraries
 Requires:	%{name}-data = %{epoch}:%{version}
 Provides:	%{name} = %{version}-%{release}
 
-%description -n %{lib_name}
+%description -n %{libname}
 This package contains the library needed to run programs dynamically
 linked with the %{name} library.
 
-%package -n	%{devel_name}
+%package -n	%{devname}
 Summary:	Development headers and libraries for %{name}
 Group:		Development/C
-Requires:	%{lib_name} = %{epoch}:%{version}
+Requires:	%{libname} = %{epoch}:%{version}
 Provides:	%{name}-devel = %{epoch}:%{version}-%{release}
 Provides:	libpopt-devel = %{epoch}:%{version}-%{release}
 
-%description -n	%{devel_name} 
+%description -n	%{devname} 
 This package contains the header files and libraries needed for
 developing programs using the %{name} library.
 
@@ -63,21 +63,18 @@ autoreconf -f
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 mkdir -p %{buildroot}/%{_lib}
-pushd %{buildroot}/%{_libdir}/
-mv lib%{name}.so.%{lib_major}* %{buildroot}/%{_lib}
-ln -sf ../../%{_lib}/lib%{name}.so.%{lib_major}.* lib%{name}.so
-popd
+mv %{buildroot}%{_libdir}/lib%{name}.so.%{major}* %{buildroot}/%{_lib}
+ln -sf /%{_lib}/lib%{name}.so.%{major} %{buildroot}%{_libdir}/lib%{name}.so
+
 %find_lang %{name}
 
-
-%files -n %{lib_name}
+%files -n %{libname}
 %doc README CHANGES
-/%{_lib}/lib%{name}.so.%{lib_major}*
+/%{_lib}/lib%{name}.so.%{major}*
 
-%files -n %{devel_name}
+%files -n %{devname}
 %{_includedir}/%{name}.h
 %{_libdir}/pkgconfig/popt.pc
 %{_libdir}/lib%{name}*a
