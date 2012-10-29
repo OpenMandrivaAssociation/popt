@@ -61,12 +61,12 @@ Provides:	%{name}-devel = %{EVRD}
 This package contains the header files and libraries needed for
 developing programs using the %{name} library.
 
-%package -n	%{name}-data
+%package	data
 Summary:	Data files for %{name}
 Group:		System/Libraries
 BuildArch:	noarch
 
-%description -n	popt-data
+%description	data
 This package contains popt data files like locales.
 
 %prep
@@ -96,38 +96,38 @@ popd
 %if %{with uclibc}
 %makeinstall_std -C uclibc
 mkdir -p %{buildroot}%{uclibc_root}/%{_lib}
-mv %{buildroot}%{uclibc_root}%{_libdir}/lib%{name}.so.%{major}* %{buildroot}%{uclibc_root}/%{_lib}
-ln -srf %{buildroot}%{uclibc_root}/%{_lib}/lib%{name}.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/lib%{name}.so
+mv %{buildroot}%{uclibc_root}%{_libdir}/libpopt.so.%{major}* %{buildroot}%{uclibc_root}/%{_lib}
+ln -srf %{buildroot}%{uclibc_root}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/libpopt.so
 
 rm -r %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig
 %endif
 
 %makeinstall_std -C system
 mkdir -p %{buildroot}/%{_lib}
-mv %{buildroot}%{_libdir}/lib%{name}.so.%{major}* %{buildroot}/%{_lib}
-ln -srf %{buildroot}/%{_lib}/lib%{name}.so.%{major}.* %{buildroot}%{_libdir}/lib%{name}.so
+mv %{buildroot}%{_libdir}/libpopt.so.%{major}* %{buildroot}/%{_lib}
+ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpopt.so
 
 %find_lang %{name}
 
 %files -n %{libname}
 %doc README CHANGES
-/%{_lib}/lib%{name}.so.%{major}*
+/%{_lib}/libpopt.so.%{major}*
 
 %if %{with uclibc}
 %files -n uclibc-%{libname}
 %doc README CHANGES
-%{uclibc_root}/%{_lib}/lib%{name}.so.%{major}*
+%{uclibc_root}/%{_lib}/libpopt.so.%{major}*
 %endif
 
 %files -n %{devname}
-%{_includedir}/%{name}.h
+%{_includedir}/popt.h
 %{_libdir}/pkgconfig/popt.pc
-%{_libdir}/lib%{name}*a
-%{_libdir}/lib%{name}.so
+%{_libdir}/libpopt.a
+%{_libdir}/libpopt.so
 %if %{with uclibc}
-%{uclibc_root}%{_libdir}/lib%{name}.a
-%{uclibc_root}%{_libdir}/lib%{name}.so
+%{uclibc_root}%{_libdir}/libpopt.a
+%{uclibc_root}%{_libdir}/libpopt.so
 %endif
-%{_mandir}/man3/popt.*
+%{_mandir}/man3/popt.3*
 
-%files -n %{name}-data -f %{name}.lang
+%files data -f %{name}.lang
