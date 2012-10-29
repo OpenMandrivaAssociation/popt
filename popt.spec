@@ -7,7 +7,7 @@
 Summary:	C library for parsing command line parameters
 Name:		popt
 Version:	1.16
-Release:	6
+Release:	7
 Epoch:		1
 License:	MIT
 Group:		System/Libraries
@@ -53,7 +53,7 @@ Summary:	Development headers and libraries for %{name}
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 %if %{with uclibc}
-Requires:	%{libname} = %{EVRD}
+Requires:	uclibc-%{libname} = %{EVRD}
 %endif
 Provides:	%{name}-devel = %{EVRD}
 
