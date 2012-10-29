@@ -2,17 +2,23 @@
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%mklibname %{name} -d
 
+%bcond_without	uclibc
+
 Summary:	C library for parsing command line parameters
 Name:		popt
 Version:	1.16
-Release:	4
+Release:	5
 Epoch:		1
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
 Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
 Patch0:		popt-1.16-pkgconfig-libdir.patch
+Patch1:		popt-1.16-remove-dead-autofoo-crap.patch
 BuildRequires:	gettext
+%if %{with uclibc}
+BuildRequires:	uClibc-devel >= 0.9.33.2-16
+%endif
 
 %description
 Popt is a C library for parsing command line parameters. Popt was
@@ -33,10 +39,22 @@ Requires:	%{name}-data = %{EVRD}
 This package contains the library needed to run programs dynamically
 linked with the %{name} library.
 
+%package -n	uclibc-%{libname}
+Summary:	Main %{name} library (uClibc linked)
+Group:		System/Libraries
+Requires:	%{name}-data = %{EVRD}
+
+%description -n uclibc-%{libname}
+This package contains the library needed to run programs dynamically
+linked with the %{name} library.
+
 %package -n	%{devname}
 Summary:	Development headers and libraries for %{name}
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
+%if %{with uclibc}
+Requires:	%{libname} = %{version}
+%endif
 Provides:	%{name}-devel = %{EVRD}
 
 %description -n	%{devname} 
@@ -54,18 +72,40 @@ This package contains popt data files like locales.
 %prep
 %setup -q
 %patch0 -p1 -b .pkglib64~
+%patch1 -p1 -b .autocrap~
 autoreconf -f
 
 %build
-%configure2_5x	--disable-rpath
-
+CONFIGURE_TOP="$PWD"
+%if %{with uclibc}
+mkdir -p uclibc
+pushd uclibc
+%uclibc_configure \
+		--disable-rpath
 %make
+popd
+%endif
+
+mkdir -p system
+pushd system
+%configure2_5x	--disable-rpath
+%make
+popd
 
 %install
-%makeinstall_std
+%if %{with uclibc}
+%makeinstall_std -C uclibc
+mkdir -p %{buildroot}%{uclibc_root}/%{_lib}
+mv %{buildroot}%{uclibc_root}%{_libdir}/lib%{name}.so.%{major}* %{buildroot}%{uclibc_root}/%{_lib}
+ln -srf %{buildroot}%{uclibc_root}/%{_lib}/lib%{name}.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/lib%{name}.so
+
+rm -r %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig
+%endif
+
+%makeinstall_std -C system
 mkdir -p %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/lib%{name}.so.%{major}* %{buildroot}/%{_lib}
-ln -sf /%{_lib}/lib%{name}.so.%{major} %{buildroot}%{_libdir}/lib%{name}.so
+ln -srf %{buildroot}/%{_lib}/lib%{name}.so.%{major}.* %{buildroot}%{_libdir}/lib%{name}.so
 
 %find_lang %{name}
 
@@ -73,11 +113,21 @@ ln -sf /%{_lib}/lib%{name}.so.%{major} %{buildroot}%{_libdir}/lib%{name}.so
 %doc README CHANGES
 /%{_lib}/lib%{name}.so.%{major}*
 
+%if %{with uclibc}
+%files -n uclibc-%{libname}
+%doc README CHANGES
+%{uclibc_root}/%{_lib}/lib%{name}.so.%{major}*
+%endif
+
 %files -n %{devname}
 %{_includedir}/%{name}.h
 %{_libdir}/pkgconfig/popt.pc
 %{_libdir}/lib%{name}*a
 %{_libdir}/lib%{name}.so
+%if %{with uclibc}
+%{uclibc_root}%{_libdir}/lib%{name}.a
+%{uclibc_root}%{_libdir}/lib%{name}.so
+%endif
 %{_mandir}/man3/popt.*
 
 %files -n %{name}-data -f %{name}.lang
