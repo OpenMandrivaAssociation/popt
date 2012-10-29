@@ -46,6 +46,7 @@ developing programs using the %{name} library.
 %package -n	%{name}-data
 Summary:	Data files for %{name}
 Group:		System/Libraries
+BuildArch:	noarch
 
 %description -n	popt-data
 This package contains popt data files like locales.
