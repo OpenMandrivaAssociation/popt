@@ -1,0 +1,11 @@
+--- popt-1.16/Makefile.am.bero	2013-01-16 12:41:21.949482313 +0100
++++ popt-1.16/Makefile.am	2013-01-16 12:41:26.233430350 +0100
+@@ -37,7 +37,7 @@ noinst_SCRIPTS = testit.sh
+ TESTS_ENVIRONMENT = \
+ test1="$(top_builddir)/test1"
+ 
+-TESTS = $(top_srcdir)/testit.sh
++TESTS = testit.sh
+ 
+ include_HEADERS = popt.h
+ 

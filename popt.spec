@@ -7,7 +7,7 @@
 Summary:	C library for parsing command line parameters
 Name:		popt
 Version:	1.16
-Release:	8
+Release:	9
 Epoch:		1
 License:	MIT
 Group:		System/Libraries
@@ -15,6 +15,7 @@ Url:		http://rpm5.org/files/popt/
 Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
 Patch0:		popt-1.16-pkgconfig-libdir.patch
 Patch1:		popt-1.16-remove-dead-autofoo-crap.patch
+Patch2:		popt-1.16-automake-1.13.patch
 BuildRequires:	gettext
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-16
@@ -71,9 +72,11 @@ This package contains popt data files like locales.
 
 %prep
 %setup -q
-%patch0 -p1 -b .pkglib64~
-%patch1 -p1 -b .autocrap~
-autoreconf -f
+%apply_patches
+autoheader
+aclocal
+automake -a
+autoconf
 
 %build
 CONFIGURE_TOP="$PWD"
