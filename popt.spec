@@ -77,6 +77,7 @@ autoheader
 aclocal
 automake -a
 autoconf
+autoreconf -fi
 
 %build
 CONFIGURE_TOP="$PWD"
