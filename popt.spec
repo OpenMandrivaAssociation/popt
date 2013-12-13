@@ -80,14 +80,14 @@ CONFIGURE_TOP="$PWD"
 %if %{with uclibc}
 mkdir -p uclibc
 pushd uclibc
-%uclibc_configure
+%uclibc_configure --enable-static
 %make
 popd
 %endif
 
 mkdir -p system
 pushd system
-%configure2_5x
+%configure2_5x --enable-static
 %make
 popd
 
