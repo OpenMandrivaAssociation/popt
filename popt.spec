@@ -8,7 +8,7 @@ Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	15
+Release:	17
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
@@ -80,14 +80,14 @@ CONFIGURE_TOP="$PWD"
 %if %{with uclibc}
 mkdir -p uclibc
 pushd uclibc
-%uclibc_configure --enable-static
+%uclibc_configure --enable-static --disable-rpath
 %make
 popd
 %endif
 
 mkdir -p system
 pushd system
-%configure2_5x --enable-static
+%configure --enable-static --disable-rpath
 %make
 popd
 
