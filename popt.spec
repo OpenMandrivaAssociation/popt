@@ -8,17 +8,19 @@ Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	20
+Release:	21
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
 Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
+Source1:	%{name}.rpmlintrc
 Patch0:		popt-1.16-pkgconfig-libdir.patch
 Patch1:		popt-1.16-remove-dead-autofoo-crap.patch
 Patch2:		popt-1.16-automake-1.13.patch
 BuildRequires:	gettext
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-16
+BuildRequires:	uclibc-gettext-devel
 %endif
 
 %description
@@ -40,6 +42,7 @@ Requires:	%{name}-data = %{EVRD}
 This package contains the library needed to run programs dynamically
 linked with the %{name} library.
 
+%if %{with uclibc}
 %package -n	uclibc-%{libname}
 Summary:	Main %{name} library (uClibc linked)
 Group:		System/Libraries
@@ -52,10 +55,20 @@ linked with the %{name} library.
 %package -n	%{devname}
 Summary:	Development headers and libraries for %{name}
 Group:		Development/C
-Requires:	%{libname} = %{EVRD}
-%if %{with uclibc}
+Requires:	%{devname} = %{EVRD}
 Requires:	uclibc-%{libname} = %{EVRD}
+Provides:	uclibc-%{name}-devel = %{EVRD}
+Conflicts:	%{devname} < 1:1.16-21
+
+%description -n	uclibc-%{devname}
+This package contains the header files and libraries needed for
+developing programs using the %{name} library.
 %endif
+
+%package -n	%{devname}
+Summary:	Development headers and libraries for %{name}
+Group:		Development/C
+Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 
 %description -n	%{devname} 
@@ -116,6 +129,10 @@ ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpop
 %files -n uclibc-%{libname}
 %doc README CHANGES
 %{uclibc_root}/%{_lib}/libpopt.so.%{major}*
+
+%files -n uclibc-%{devname}
+%{uclibc_root}%{_libdir}/libpopt.a
+%{uclibc_root}%{_libdir}/libpopt.so
 %endif
 
 %files -n %{devname}
@@ -123,11 +140,6 @@ ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpop
 %{_libdir}/pkgconfig/popt.pc
 %{_libdir}/libpopt.a
 %{_libdir}/libpopt.so
-%if %{with uclibc}
-%{uclibc_root}%{_libdir}/libpopt.a
-%{uclibc_root}%{_libdir}/libpopt.so
-%endif
 %{_mandir}/man3/popt.3*
 
 %files data -f %{name}.lang
-
