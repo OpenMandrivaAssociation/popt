@@ -52,7 +52,7 @@ Requires:	%{name}-data = %{EVRD}
 This package contains the library needed to run programs dynamically
 linked with the %{name} library.
 
-%package -n	%{devname}
+%package -n	uclibc-%{devname}
 Summary:	Development headers and libraries for %{name}
 Group:		Development/C
 Requires:	%{devname} = %{EVRD}
