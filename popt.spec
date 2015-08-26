@@ -2,13 +2,13 @@
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%mklibname %{name} -d
 
-%bcond_without	uclibc
+%bcond_with	uclibc
 
 Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	22
+Release:	23
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
