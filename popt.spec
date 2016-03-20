@@ -2,13 +2,17 @@
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%mklibname %{name} -d
 
+# popt is built as a static library - can't have compiler specific bits
+# (such as LLVM bytecode or GIMPLE representations) inside the .o files
+%define _disable_lto 1
+
 %bcond_with	uclibc
 
 Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	23
+Release:	24
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
