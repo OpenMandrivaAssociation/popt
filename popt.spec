@@ -1,18 +1,16 @@
-%define	major	0
-%define	libname	%mklibname %{name} %{major}
-%define	devname	%mklibname %{name} -d
+%define major 0
+%define libname %mklibname %{name} %{major}
+%define devname %mklibname %{name} -d
 
 # popt is built as a static library - can't have compiler specific bits
 # (such as LLVM bytecode or GIMPLE representations) inside the .o files
 %define _disable_lto 1
 
-%bcond_with	uclibc
-
 Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	24
+Release:	25
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
@@ -22,10 +20,6 @@ Patch0:		popt-1.16-pkgconfig-libdir.patch
 Patch1:		popt-1.16-remove-dead-autofoo-crap.patch
 Patch2:		popt-1.16-automake-1.13.patch
 BuildRequires:	gettext
-%if %{with uclibc}
-BuildRequires:	uClibc-devel >= 0.9.33.2-16
-BuildRequires:	uclibc-gettext-devel
-%endif
 
 %description
 Popt is a C library for parsing command line parameters. Popt was
@@ -45,29 +39,6 @@ Requires:	%{name}-data = %{EVRD}
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
 linked with the %{name} library.
-
-%if %{with uclibc}
-%package -n	uclibc-%{libname}
-Summary:	Main %{name} library (uClibc linked)
-Group:		System/Libraries
-Requires:	%{name}-data = %{EVRD}
-
-%description -n uclibc-%{libname}
-This package contains the library needed to run programs dynamically
-linked with the %{name} library.
-
-%package -n	uclibc-%{devname}
-Summary:	Development headers and libraries for %{name}
-Group:		Development/C
-Requires:	%{devname} = %{EVRD}
-Requires:	uclibc-%{libname} = %{EVRD}
-Provides:	uclibc-%{name}-devel = %{EVRD}
-Conflicts:	%{devname} < 1:1.16-21
-
-%description -n	uclibc-%{devname}
-This package contains the header files and libraries needed for
-developing programs using the %{name} library.
-%endif
 
 %package -n	%{devname}
 Summary:	Development headers and libraries for %{name}
@@ -93,32 +64,11 @@ This package contains popt data files like locales.
 autoreconf -fi
 
 %build
-CONFIGURE_TOP="$PWD"
-%if %{with uclibc}
-mkdir -p uclibc
-pushd uclibc
-%uclibc_configure --enable-static --disable-rpath
-%make
-popd
-%endif
-
-mkdir -p system
-pushd system
 %configure --enable-static --disable-rpath
 %make
-popd
 
 %install
-%if %{with uclibc}
-%makeinstall_std -C uclibc
-mkdir -p %{buildroot}%{uclibc_root}/%{_lib}
-mv %{buildroot}%{uclibc_root}%{_libdir}/libpopt.so.%{major}* %{buildroot}%{uclibc_root}/%{_lib}
-ln -srf %{buildroot}%{uclibc_root}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/libpopt.so
-
-rm -r %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig
-%endif
-
-%makeinstall_std -C system
+%makeinstall_std
 mkdir -p %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libpopt.so.%{major}* %{buildroot}/%{_lib}
 ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpopt.so
@@ -126,18 +76,7 @@ ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpop
 %find_lang %{name}
 
 %files -n %{libname}
-%doc README CHANGES
 /%{_lib}/libpopt.so.%{major}*
-
-%if %{with uclibc}
-%files -n uclibc-%{libname}
-%doc README CHANGES
-%{uclibc_root}/%{_lib}/libpopt.so.%{major}*
-
-%files -n uclibc-%{devname}
-%{uclibc_root}%{_libdir}/libpopt.a
-%{uclibc_root}%{_libdir}/libpopt.so
-%endif
 
 %files -n %{devname}
 %{_includedir}/popt.h
