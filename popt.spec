@@ -7,7 +7,7 @@
 %define _disable_lto 1
 
 # (tpg) optimize it a bit
-%global %optflags -O3
+%global optflags -O3
 
 Summary:	C library for parsing command line parameters
 Name:		popt
