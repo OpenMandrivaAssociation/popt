@@ -6,11 +6,14 @@
 # (such as LLVM bytecode or GIMPLE representations) inside the .o files
 %define _disable_lto 1
 
+# (tpg) optimize it a bit
+%global %optflags -03
+
 Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	25
+Release:	26
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
@@ -46,7 +49,7 @@ Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 
-%description -n	%{devname} 
+%description -n	%{devname}
 This package contains the header files and libraries needed for
 developing programs using the %{name} library.
 
