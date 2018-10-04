@@ -13,7 +13,7 @@ Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	28
+Release:	29
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
@@ -38,6 +38,7 @@ shell-like rules.
 Summary:	Main %{name} library
 Group:		System/Libraries
 Requires:	%{name}-data = %{EVRD}
+Provides:	%{name} = %{EVRD}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
