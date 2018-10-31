@@ -13,7 +13,7 @@ Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	29
+Release:	30
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
