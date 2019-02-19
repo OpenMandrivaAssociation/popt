@@ -6,14 +6,11 @@
 # (such as LLVM bytecode or GIMPLE representations) inside the .o files
 %define _disable_lto 1
 
-# (tpg) optimize it a bit
-%global optflags %optflags -O3
-
 Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	30
+Release:	31
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
@@ -63,16 +60,15 @@ BuildArch:	noarch
 This package contains popt data files like locales.
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 autoreconf -fi
 
 %build
 %configure --enable-static --disable-rpath
-%make
+%make_build
 
 %install
-%makeinstall_std
+%make_install
 mkdir -p %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libpopt.so.%{major}* %{buildroot}/%{_lib}
 ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpopt.so
