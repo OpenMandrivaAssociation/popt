@@ -10,15 +10,21 @@ Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	31
+Release:	32
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
 Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
 Source1:	%{name}.rpmlintrc
-Patch0:		popt-1.16-pkgconfig-libdir.patch
 Patch1:		popt-1.16-remove-dead-autofoo-crap.patch
 Patch2:		popt-1.16-automake-1.13.patch
+# (tpg) patches from Fedora
+Patch10:	popt-1.16-pkgconfig.patch
+Patch11:	popt-1.16-execfail.patch
+Patch12:	popt-1.16-man-page.patch
+Patch13:	popt-1.16-help.patch
+Patch14:	popt-1.16-nextarg-memleak.patch
+Patch15:	popt-1.16-glob-error.patch
 BuildRequires:	gettext
 
 %description
