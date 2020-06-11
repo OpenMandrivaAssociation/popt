@@ -1,6 +1,13 @@
+# popt is used by gstreamer, gstreamer is used by wine
+%ifarch %{x86_64}
+%bcond_without compat32
+%endif
+
 %define major 0
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
+%define lib32name %mklib32name %{name} %{major}
+%define dev32name %mklib32name %{name} -d
 
 # popt is built as a static library - can't have compiler specific bits
 # (such as LLVM bytecode or GIMPLE representations) inside the .o files
@@ -10,7 +17,7 @@ Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.16
-Release:	32
+Release:	33
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
@@ -65,16 +72,54 @@ BuildArch:	noarch
 %description	data
 This package contains popt data files like locales.
 
+%if %{with compat32}
+%package -n	%{lib32name}
+Summary:	Main %{name} library (32-bit)
+Group:		System/Libraries
+Requires:	%{name}-data = %{EVRD}
+
+%description -n %{lib32name}
+This package contains the library needed to run programs dynamically
+linked with the %{name} library.
+
+%package -n	%{dev32name}
+Summary:	Development headers and libraries for %{name} (32-bit)
+Group:		Development/C
+Requires:	%{devname} = %{EVRD}
+Requires:	%{lib32name} = %{EVRD}
+
+%description -n	%{dev32name}
+This package contains the header files and libraries needed for
+developing programs using the %{name} library.
+%endif
+
 %prep
 %autosetup -p1
 autoreconf -fi
+export CONFIGURE_TOP="$(pwd)"
+
+%if %{with compat32}
+mkdir build32
+cd build32
+%configure32 --enable-static --disable-rpath
+cd ..
+%endif
+
+mkdir build
+cd build
+%configure --enable-static --disable-rpath
 
 %build
-%configure --enable-static --disable-rpath
-%make_build
+%if %{with compat32}
+%make_build -C build32
+%endif
+%make_build -C build
 
 %install
-%make_install
+%if %{with compat32}
+%make_install -C build32
+%endif
+%make_install -C build
 mkdir -p %{buildroot}/%{_lib}
 mv %{buildroot}%{_libdir}/libpopt.so.%{major}* %{buildroot}/%{_lib}
 ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpopt.so
@@ -92,3 +137,13 @@ ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpop
 %{_mandir}/man3/popt.3*
 
 %files data -f %{name}.lang
+
+%if %{with compat32}
+%files -n %{lib32name}
+%{_prefix}/lib/libpopt.so.%{major}*
+
+%files -n %{dev32name}
+%{_prefix}/lib/pkgconfig/popt.pc
+%{_prefix}/lib/libpopt.a
+%{_prefix}/lib/libpopt.so
+%endif
