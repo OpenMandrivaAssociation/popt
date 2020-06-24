@@ -16,22 +16,13 @@
 Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
-Version:	1.16
-Release:	33
+Version:	1.18
+Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		http://rpm5.org/files/popt/
 Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
 Source1:	%{name}.rpmlintrc
-Patch1:		popt-1.16-remove-dead-autofoo-crap.patch
-Patch2:		popt-1.16-automake-1.13.patch
-# (tpg) patches from Fedora
-Patch10:	popt-1.16-pkgconfig.patch
-Patch11:	popt-1.16-execfail.patch
-Patch12:	popt-1.16-man-page.patch
-Patch13:	popt-1.16-help.patch
-Patch14:	popt-1.16-nextarg-memleak.patch
-Patch15:	popt-1.16-glob-error.patch
 BuildRequires:	gettext
 
 %description
@@ -95,7 +86,6 @@ developing programs using the %{name} library.
 
 %prep
 %autosetup -p1
-autoreconf -fi
 export CONFIGURE_TOP="$(pwd)"
 
 %if %{with compat32}
@@ -120,14 +110,11 @@ cd build
 %make_install -C build32
 %endif
 %make_install -C build
-mkdir -p %{buildroot}/%{_lib}
-mv %{buildroot}%{_libdir}/libpopt.so.%{major}* %{buildroot}/%{_lib}
-ln -srf %{buildroot}/%{_lib}/libpopt.so.%{major}.* %{buildroot}%{_libdir}/libpopt.so
 
 %find_lang %{name}
 
 %files -n %{libname}
-/%{_lib}/libpopt.so.%{major}*
+%{_libdir}/libpopt.so.%{major}*
 
 %files -n %{devname}
 %{_includedir}/popt.h
