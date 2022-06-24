@@ -70,6 +70,7 @@ This package contains popt data files like locales.
 Summary:	Main %{name} library (32-bit)
 Group:		System/Libraries
 Requires:	%{name}-data = %{EVRD}
+BuildRequires:	libc6
 
 %description -n %{lib32name}
 This package contains the library needed to run programs dynamically
