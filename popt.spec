@@ -9,6 +9,8 @@
 %define lib32name %mklib32name %{name} %{major}
 %define dev32name %mklib32name %{name} -d
 
+%define beta rc1
+
 # popt is built as a static library - can't have compiler specific bits
 # (such as LLVM bytecode or GIMPLE representations) inside the .o files
 %define _disable_lto 1
@@ -16,12 +18,12 @@
 Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
-Version:	1.18
+Version:	1.19
 Release:	1
 License:	MIT
 Group:		System/Libraries
-Url:		http://rpm5.org/files/popt/
-Source0:	http://rpm5.org/files/popt/%{name}-%{version}.tar.gz
+Url:		https://rpm.org/
+Source0:	https://ftp.osuosl.org/pub/rpm/popt/releases/%{?beta:testing/}popt-%{version}%{?beta:-%{beta}}.tar.gz
 Source1:	%{name}.rpmlintrc
 BuildRequires:	gettext
 
@@ -85,7 +87,7 @@ developing programs using the %{name} library.
 %endif
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{version}%{?beta:-%{beta}}
 export CONFIGURE_TOP="$(pwd)"
 
 %if %{with compat32}
