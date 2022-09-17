@@ -9,7 +9,7 @@
 %define lib32name %mklib32name %{name} %{major}
 %define dev32name %mklib32name %{name} -d
 
-%define beta rc1
+#define beta rc1
 
 # popt is built as a static library - can't have compiler specific bits
 # (such as LLVM bytecode or GIMPLE representations) inside the .o files
@@ -23,7 +23,7 @@ Release:	1
 License:	MIT
 Group:		System/Libraries
 Url:		https://rpm.org/
-Source0:	https://ftp.osuosl.org/pub/rpm/popt/releases/%{?beta:testing/}popt-%{version}%{?beta:-%{beta}}.tar.gz
+Source0:	http://ftp.rpm.org/popt/releases/%{?beta:testing/}%{!?beta:popt-%(echo %{version}|cut -d. -f1).x/}popt-%{version}%{?beta:-%{beta}}.tar.gz
 Source1:	%{name}.rpmlintrc
 BuildRequires:	gettext
 
