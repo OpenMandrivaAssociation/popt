@@ -11,15 +11,11 @@
 
 #define beta rc1
 
-# popt is built as a static library - can't have compiler specific bits
-# (such as LLVM bytecode or GIMPLE representations) inside the .o files
-%define _disable_lto 1
-
 Summary:	C library for parsing command line parameters
 Name:		popt
 Epoch:		1
 Version:	1.19
-Release:	%{?beta:0.%{beta}.}2
+Release:	%{?beta:0.%{beta}.}3
 License:	MIT
 Group:		System/Libraries
 Url:		https://rpm.org/
@@ -37,52 +33,52 @@ arguments to be aliased via configuration files and includes utility
 functions for parsing arbitrary strings into argv[] arrays using
 shell-like rules.
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	Main %{name} library
 Group:		System/Libraries
-Requires:	%{name}-data = %{EVRD}
+Requires(meta):	%{name}-data = %{EVRD}
 Provides:	%{name} = %{EVRD}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
 linked with the %{name} library.
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	Development headers and libraries for %{name}
 Group:		Development/C
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 
-%description -n	%{devname}
+%description -n %{devname}
 This package contains the header files and libraries needed for
 developing programs using the %{name} library.
 
-%package	data
+%package data
 Summary:	Data files for %{name}
 Group:		System/Libraries
 BuildArch:	noarch
 
-%description	data
+%description data
 This package contains popt data files like locales.
 
 %if %{with compat32}
-%package -n	%{lib32name}
+%package -n %{lib32name}
 Summary:	Main %{name} library (32-bit)
 Group:		System/Libraries
-Requires:	%{name}-data = %{EVRD}
+Requires(meta):	%{name}-data = %{EVRD}
 BuildRequires:	libc6
 
 %description -n %{lib32name}
 This package contains the library needed to run programs dynamically
 linked with the %{name} library.
 
-%package -n	%{dev32name}
+%package -n %{dev32name}
 Summary:	Development headers and libraries for %{name} (32-bit)
 Group:		Development/C
 Requires:	%{devname} = %{EVRD}
 Requires:	%{lib32name} = %{EVRD}
 
-%description -n	%{dev32name}
+%description -n %{dev32name}
 This package contains the header files and libraries needed for
 developing programs using the %{name} library.
 %endif
