@@ -3,19 +3,22 @@
 %bcond_without compat32
 %endif
 
+%global build_ldflags %{build_ldflags} -Wl,--undefined-version
+
 %define major 0
-%define libname %mklibname %{name} %{major}
+%define oldlibname %mklibname %{name} 0
+%define libname %mklibname %{name}
 %define devname %mklibname %{name} -d
-%define lib32name %mklib32name %{name} %{major}
+%define oldlib32name %mklib32name %{name} 0
+%define lib32name %mklib32name %{name}
 %define dev32name %mklib32name %{name} -d
 
 #define beta rc1
 
 Summary:	C library for parsing command line parameters
 Name:		popt
-Epoch:		1
 Version:	1.19
-Release:	%{?beta:0.%{beta}.}3
+Release:	%{?beta:0.%{beta}.}4
 License:	MIT
 Group:		System/Libraries
 Url:		https://rpm.org/
@@ -38,6 +41,8 @@ Summary:	Main %{name} library
 Group:		System/Libraries
 Requires(meta):	%{name}-data = %{EVRD}
 Provides:	%{name} = %{EVRD}
+Obsoletes:	%{oldlibname} < 1:%{version}-%{release}
+Provides:	%{oldlibname} = 1:%{version}-%{release}
 
 %description -n %{libname}
 This package contains the library needed to run programs dynamically
@@ -67,6 +72,8 @@ Summary:	Main %{name} library (32-bit)
 Group:		System/Libraries
 Requires(meta):	%{name}-data = %{EVRD}
 BuildRequires:	libc6
+Obsoletes:	%{oldlib32name} < 1:%{version}-%{release}
+Provides:	%{oldlib32name} = 1:%{version}-%{release}
 
 %description -n %{lib32name}
 This package contains the library needed to run programs dynamically
@@ -111,36 +118,6 @@ cd build
 %make_install -C build
 
 %find_lang %{name}
-
-# (tpg) strip LTO from "LLVM IR bitcode" files
-check_convert_bitcode() {
-    printf '%s\n' "Checking for LLVM IR bitcode"
-    llvm_file_name=$(realpath ${1})
-    llvm_file_type=$(file ${llvm_file_name})
-
-    if printf '%s\n' "${llvm_file_type}" | grep -q "LLVM IR bitcode"; then
-# recompile without LTO
-    clang %{optflags} -fno-lto -Wno-unused-command-line-argument -x ir ${llvm_file_name} -c -o ${llvm_file_name}
-    elif printf '%s\n' "${llvm_file_type}" | grep -q "current ar archive"; then
-    printf '%s\n' "Unpacking ar archive ${llvm_file_name} to check for LLVM bitcode components."
-# create archive stage for objects
-    archive_stage=$(mktemp -d)
-    archive=${llvm_file_name}
-    cd ${archive_stage}
-    ar x ${archive}
-    for archived_file in $(find -not -type d); do
-        check_convert_bitcode ${archived_file}
-        printf '%s\n' "Repacking ${archived_file} into ${archive}."
-        ar r ${archive} ${archived_file}
-    done
-    ranlib ${archive}
-    cd ..
-    fi
-}
-
-for i in $(find %{buildroot} -type f -name "*.[ao]"); do
-    check_convert_bitcode ${i}
-done
 
 %files -n %{libname}
 %{_libdir}/libpopt.so.%{major}*
