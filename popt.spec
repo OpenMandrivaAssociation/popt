@@ -24,6 +24,11 @@ Group:		System/Libraries
 Url:		https://rpm.org/
 Source0:	http://ftp.rpm.org/popt/releases/%{?beta:testing/}%{!?beta:popt-%(echo %{version}|cut -d. -f1).x/}popt-%{version}%{?beta:-%{beta}}.tar.gz
 Source1:	%{name}.rpmlintrc
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	gettext
 
 %description
