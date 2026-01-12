@@ -26,7 +26,6 @@ Source0:	http://ftp.rpm.org/popt/releases/%{?beta:testing/}%{!?beta:popt-%(echo 
 Source1:	%{name}.rpmlintrc
 BuildRequires:	autoconf
 BuildRequires:	automake
-BuildRequires:	libtool-base
 BuildRequires:	slibtool
 BuildRequires:	make
 BuildRequires:	gettext
@@ -97,6 +96,7 @@ developing programs using the %{name} library.
 
 %prep
 %autosetup -p1 -n %{name}-%{version}%{?beta:-%{beta}}
+autoreconf --force
 export CONFIGURE_TOP="$(pwd)"
 
 %if %{with compat32}
